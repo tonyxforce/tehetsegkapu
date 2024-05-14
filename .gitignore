@@ -1,0 +1,6 @@
+*.js
+dumps
+node_modules
+.vscode/
+api/**/**.json
+public/api/**/*.jpg
