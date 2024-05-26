@@ -41,6 +41,8 @@ file.log.entries.forEach((e:HarEntry, i:number)=>{
 console.log(out);
 writeFileSync("out.json", JSON.stringify(out, null, 4)) */
 
+var fofs: Set<string> = new Set();
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/api/info/options", (req, res) => {
@@ -55,6 +57,10 @@ app.get("/api/info/options", (req, res) => {
 	});
 })
 
+app.get("/meres/feladatok", (req, res)=>{
+	res.redirect("/meres/inditas.html")
+})
+
 app.post("/api/v3/kitoltesek/inditas", (req, res) => {
 	res.sendFile(path.join(__dirname, "api", "v3", "kitoltesek", "inditas.json"))
 })
@@ -64,12 +70,14 @@ app.get("/api/hirek/:id/kep", (req, res) => {
 })
 
 app.get(/^\/api\/(mentorok\/|hirek\/|programok\/|versenyek\/landingversenyek)$/, (req, res) => {
-	console.log (path.join(__dirname, "." + req.path.replace(/\/$/, "") + ".json"))
 	res.sendFile(path.join(__dirname, "." + req.path.replace(/\/$/, "") + ".json"))
 })
 
 app.use((req, res) => {
-	res.status(404).send("404" + req.url)
+	res.status(404).send("404" + req.url);
+	fofs.add(req.url);
+	console.log(Array(fofs));
+	fs.writeFileSync("b.txt", Array.from(fofs).join("\r\n"))
 })
 
 
